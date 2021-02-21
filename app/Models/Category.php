@@ -18,12 +18,7 @@ class Category extends Model
         'title',
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-
-    ];
+    public function articles(){
+      return $this->belongsToMany(Article::class, 'category_article', 'category_id', 'article_id');
+    }
 }
