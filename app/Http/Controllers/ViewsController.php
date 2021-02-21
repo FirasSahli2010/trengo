@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Views;
+use App\Models\Article;
 use Illuminate\Http\Request;
+
+use Illuminate\Database\Eloquent\Builder;
 
 class ViewsController extends Controller
 {
@@ -25,7 +28,20 @@ class ViewsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      $article = Article::find($request->article);
+        $view = new Views([
+          'user_address' => $request->user_address,
+          //'article_id' => $request->article,
+        ]);
+
+        //$view->article = $article;
+        $view->article()->associate($article);
+
+        //$view->save();
+        //$view->article()->attach($article);
+        $view->save();
+
+          return $view->load('article');
     }
 
     /**
