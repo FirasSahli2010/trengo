@@ -31,14 +31,10 @@ class ViewsController extends Controller
       $article = Article::find($request->article);
         $view = new Views([
           'user_address' => $request->user_address,
-          //'article_id' => $request->article,
         ]);
 
-        //$view->article = $article;
         $view->article()->associate($article);
 
-        //$view->save();
-        //$view->article()->attach($article);
         $view->save();
 
           return $view->load('article');

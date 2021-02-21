@@ -31,3 +31,4 @@ Route::apiResource('article', ArticleController::class);
 Route::apiResource('category', CategoryController::class);
 
 Route::apiResource('view', ViewsController::class);
+Route::apiResource('rating', RatingController::class);
