@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ViewsController;
+use App\Http\Controllers\RatingController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -27,3 +29,6 @@ Route::get('article/category/{category_list}', [ArticleController::class, 'categ
 
 Route::apiResource('article', ArticleController::class);
 Route::apiResource('category', CategoryController::class);
+
+Route::apiResource('view', ViewsController::class);
+Route::apiResource('rating', RatingController::class);

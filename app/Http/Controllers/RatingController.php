@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Rating;
+use App\Models\Article;
 use Illuminate\Http\Request;
 
 class RatingController extends Controller
@@ -25,7 +26,17 @@ class RatingController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      $article = Article::find($request->article);
+        $rating = new Rating([
+          'user_address' => $request->user_address,
+          'score'=>$request->score,
+        ]);
+
+        $rating->article()->associate($article);
+
+        $rating->save();
+
+          return $rating->load('article');
     }
 
     /**

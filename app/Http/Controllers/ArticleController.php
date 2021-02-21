@@ -33,15 +33,6 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
-
-      // $article = new Article($request->all());
-      // //return 'FFFFFFFFF';
-      // // $article = new Article();
-      // // $article->title = $request['title'];
-      // // $article->desc = $request['body'];
-      // // $article->categories = $request['categories'];
-      // //
-      //  $article->save();
       $categories = Category::Find($request->categories);
       $article = new Article([
 
@@ -51,7 +42,6 @@ class ArticleController extends Controller
       $article->save();
       $article->categories()->attach($categories);
       $article->save();
-      //return response()->json($article->load('categories'), 201);
       return new ArticleResource($article->load('categories'), 201);
 
     }
@@ -62,12 +52,8 @@ class ArticleController extends Controller
      * @param  \App\Models\Article  $article
      * @return \Illuminate\Http\Response
      */
-    //public function show($id)
     public function show(Article $article)
     {
-        // $article = Article::findorfail($id);
-        // return $article;
-        //return (new ArticleResource($article->load('categories')))->response();
         return new ArticleResource($article->load('categories'));
     }
 
