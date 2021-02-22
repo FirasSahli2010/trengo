@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\DB;
 use App\Models\Article;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -29,6 +29,27 @@ class ArticleController extends Controller
                   Article::withCount('views')->get()
                 )->sortByDesc('views_count');
           return $articleCollectionSorted = $articleCollection;
+    }
+
+    public function rating_soort()
+    {
+          // $articleCollection = collect(
+          //         Article::withCount('ratings')::withAvg('ratings')->get()
+          //       )->sortByDesc('ra');
+
+          // $articleCollection = collect(
+          //         Article::All()->load('ratings')->avg('score')
+          //       ); // ::withCount('ratings')
+          // return $articleCollectionSorted = $articleCollection;
+
+          //$data = Article::with('ratings')->select('articles.*', 'sum(score)')->join('ratings','article_id','=','articles.id')->groupBy('articles.id')->get();
+          $data = DB::table('articles')
+                          ->leftJoin('ratings','articles.id', '=', 'ratings.article_id')
+                          ->groupBy('articles.id')
+                          ->select('articles.*', DB::raw('sum(score) as total_rating'))
+                          ->orderBy('total_rating', 'DESC')
+                          ->get();
+          return $data;
     }
 
 
