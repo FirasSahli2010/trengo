@@ -25,6 +25,14 @@ class ArticleController extends Controller
         return ArticleResource::collection(Article::all()->load('categories'));
     }
 
+    public function dateFilter($fromDate, $toDate) {
+      //$articles = Article::whereBetween('created_at', [date($fromDate), date($toDate)])->get();
+      $articles = Article::whereDate('created_at', '>=', $fromDate)
+                          ->whereDate('created_at', '<=', $toDate)
+                          ->get();
+      return ArticleResource::collection($articles->load('categories'));
+    }
+
     /**
      * Store a newly created resource in storage.
      *
