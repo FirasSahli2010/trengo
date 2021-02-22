@@ -52,6 +52,13 @@ class ArticleController extends Controller
           return $data;
     }
 
+    public function article_amount_limit($amount_limit)
+    {
+      if ($amount_limit > 0)
+      {
+        return Article::All()->take($amount_limit);
+      }
+    }
 
     public function display_article_views(Article $article)
     {

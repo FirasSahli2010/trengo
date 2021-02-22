@@ -30,6 +30,7 @@ Route::get('article/from/{from_date}/to/{to_date}', 'App\Http\Controllers\Articl
 Route::get('article/views', 'App\Http\Controllers\ArticleController@display_views');
 Route::get('article/ratings/sort', 'App\Http\Controllers\ArticleController@rating_soort');
 Route::get('article/{article}/views', 'App\Http\Controllers\ArticleController@display_article_views');
+Route::get('article/limit/{limit}', 'App\Http\Controllers\ArticleController@article_amount_limit');
 Route::apiResource('article', ArticleController::class);
 Route::apiResource('category', CategoryController::class);
 
