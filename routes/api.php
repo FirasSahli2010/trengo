@@ -27,6 +27,8 @@ Route::get('article/category/{category_list}', [ArticleController::class, 'categ
 //
 // Route::get('article', [ArticleController::class, 'index']);
 Route::get('article/from/{from_date}/to/{to_date}', 'App\Http\Controllers\ArticleController@dateFilter');
+Route::get('article/views', 'App\Http\Controllers\ArticleController@display_views');
+Route::get('article/{article}/views', 'App\Http\Controllers\ArticleController@display_article_views');
 Route::apiResource('article', ArticleController::class);
 Route::apiResource('category', CategoryController::class);
 

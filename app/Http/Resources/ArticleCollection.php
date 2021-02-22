@@ -15,13 +15,17 @@ class ArticleCollection extends ResourceCollection
     public function toArray($request)
     {
         //return parent::toArray($request);
-        return [
-          'id' => $this->id,
-          'title' => $this->title,
-          'desc' => $this->desc,
-          'categories' => CategoryResource::collection($this->categories),
-          'created_at' => (string) $this->created_at,
-          'updated_at' => (string) $this->updated_at,
-        ];
+        return $this->collection->map(function ($item) {
+          return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'desc' => $this->desc,
+            'categories' => CategoryResource::collection($this->whenLoaded('categories')),
+            'views' => $this->whenLoaded('views'),
+            'rating' => $this->whenLoaded('ratings'),
+            'created_at' => (string) $this->created_at,
+            'updated_at' => (string) $this->updated_at,
+          ];
+        });
     }
 }

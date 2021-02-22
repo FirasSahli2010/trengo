@@ -20,11 +20,11 @@ class Article extends Model
     ];
 
     public function views(){
-      return $this->hasMany(Views::class);
+      return $this->hasMany(Views::class, 'article_id');
     }
 
     public function ratings(){
-      return $this->hasMany(Rating::class);
+      return $this->hasMany(Rating::class, 'article_id');
     }
 
     public function categories() {

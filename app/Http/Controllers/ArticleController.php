@@ -20,13 +20,24 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        // $articles = Article::All();
-        // return $articles;/
         return ArticleResource::collection(Article::all()->load('categories'));
     }
 
+    public function display_views()
+    {
+          $articleCollection = collect(
+                  Article::withCount('views')->get()
+                )->sortByDesc('views_count');
+          return $articleCollectionSorted = $articleCollection;
+    }
+
+
+    public function display_article_views(Article $article)
+    {
+        return new ArticleResource($article);
+    }
+
     public function dateFilter($fromDate, $toDate) {
-      //$articles = Article::whereBetween('created_at', [date($fromDate), date($toDate)])->get();
       $articles = Article::whereDate('created_at', '>=', $fromDate)
                           ->whereDate('created_at', '<=', $toDate)
                           ->get();
