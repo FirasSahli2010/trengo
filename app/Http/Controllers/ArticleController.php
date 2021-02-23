@@ -33,16 +33,6 @@ class ArticleController extends Controller
 
     public function rating_soort()
     {
-          // $articleCollection = collect(
-          //         Article::withCount('ratings')::withAvg('ratings')->get()
-          //       )->sortByDesc('ra');
-
-          // $articleCollection = collect(
-          //         Article::All()->load('ratings')->avg('score')
-          //       ); // ::withCount('ratings')
-          // return $articleCollectionSorted = $articleCollection;
-
-          //$data = Article::with('ratings')->select('articles.*', 'sum(score)')->join('ratings','article_id','=','articles.id')->groupBy('articles.id')->get();
           $data = DB::table('articles')
                           ->leftJoin('ratings','articles.id', '=', 'ratings.article_id')
                           ->groupBy('articles.id')
@@ -164,5 +154,18 @@ class ArticleController extends Controller
         //
     }
 
+    public function category_search($category_list)
+    {
+      $searchTermArray = explode(' ',$category_list);
+
+      $cnt = 0;
+
+      $data = Article::with('categories')->whereHas('categories',
+            function (Builder $query) use($searchTermArray) {
+              return $query->whereIn('id', $searchTermArray);
+            } )
+        ->get();
+      return $data;
+    }
 
 }
