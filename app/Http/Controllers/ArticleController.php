@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\DB;
 use App\Models\Article;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -20,9 +20,83 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        // $articles = Article::All();
-        // return $articles;/
         return ArticleResource::collection(Article::all()->load('categories'));
+    }
+
+    public function display_views()
+    {
+          $articleCollection = collect(
+                  Article::withCount('views')->get()
+                )->sortByDesc('views_count');
+          return $articleCollectionSorted = $articleCollection;
+    }
+
+    public function rating_soort()
+    {
+          $data = DB::table('articles')
+                          ->leftJoin('ratings','articles.id', '=', 'ratings.article_id')
+                          ->groupBy('articles.id')
+                          ->select('articles.*', DB::raw('sum(score) as total_rating'))
+                          ->orderBy('total_rating', 'DESC')
+                          ->get();
+          return $data;
+    }
+
+    public function article_amount_limit($amount_limit)
+    {
+      if ($amount_limit > 0)
+      {
+        return Article::All()->take($amount_limit);
+      }
+    }
+
+    public function search_articles($where, $terms)
+    {
+      $searchTermArray = explode(' ', $terms);
+      $cnt = 0;
+      if ($where == 'body')
+      {
+        foreach ($searchTermArray as $searchTerm) {
+          if($cnt == 0)
+          {
+            $cnt++;
+            $data = Article::where("desc", "like", "%".$searchTerm."%");
+          }
+          else {
+            $data = $data ->orWhere("desc", "like",  "%".$searchTerm."%");
+          }
+
+        }
+      }
+      else if ($where == 'title')
+      {
+
+        foreach ($searchTermArray as $searchTerm) {
+
+          if($cnt == 0)
+          {
+            $cnt++;
+            $data = Article::where("title", "like",  "%".$searchTerm."%");
+          }
+          else {
+            $data = $data->orWhere("title", "like",  "%".$searchTerm."%");
+          }
+        }
+
+        }
+        return $data->get();
+    }
+
+    public function display_article_views(Article $article)
+    {
+        return new ArticleResource($article);
+    }
+
+    public function dateFilter($fromDate, $toDate) {
+      $articles = Article::whereDate('created_at', '>=', $fromDate)
+                          ->whereDate('created_at', '<=', $toDate)
+                          ->get();
+      return ArticleResource::collection($articles->load('categories'));
     }
 
     /**
@@ -80,5 +154,18 @@ class ArticleController extends Controller
         //
     }
 
+    public function category_search($category_list)
+    {
+      $searchTermArray = explode(' ',$category_list);
+
+      $cnt = 0;
+
+      $data = Article::with('categories')->whereHas('categories',
+            function (Builder $query) use($searchTermArray) {
+              return $query->whereIn('id', $searchTermArray);
+            } )
+        ->get();
+      return $data;
+    }
 
 }

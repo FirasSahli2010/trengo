@@ -24,6 +24,9 @@ class ArticleResource extends JsonResource
           //'categories' => new CategoryResource($this->loadMissing('articles')),
           //'categories' => CategoryResource::collection($this->categories),
           'categories' => CategoryResource::collection($this->whenLoaded('categories')),
+          'views' => $this->whenLoaded('views'),
+          'rating' => $this->whenLoaded('ratings'),
+          'views_count' => $this->views->count(),
           'created_at' => (string) $this->created_at,
           'updated_at' => (string) $this->updated_at,
         ];
