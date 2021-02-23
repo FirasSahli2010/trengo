@@ -31,6 +31,7 @@ Route::get('article/views', 'App\Http\Controllers\ArticleController@display_view
 Route::get('article/ratings/sort', 'App\Http\Controllers\ArticleController@rating_soort');
 Route::get('article/{article}/views', 'App\Http\Controllers\ArticleController@display_article_views');
 Route::get('article/limit/{limit}', 'App\Http\Controllers\ArticleController@article_amount_limit');
+Route::get('article/search/{where}/{terms}', 'App\Http\Controllers\ArticleController@search_articles');
 Route::apiResource('article', ArticleController::class);
 Route::apiResource('category', CategoryController::class);
 

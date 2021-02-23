@@ -60,6 +60,43 @@ class ArticleController extends Controller
       }
     }
 
+    public function search_articles($where, $terms)
+    {
+      $searchTermArray = explode(' ', $terms);
+      $cnt = 0;
+      if ($where == 'body')
+      {
+        foreach ($searchTermArray as $searchTerm) {
+          if($cnt == 0)
+          {
+            $cnt++;
+            $data = Article::where("desc", "like", "%".$searchTerm."%");
+          }
+          else {
+            $data = $data ->orWhere("desc", "like",  "%".$searchTerm."%");
+          }
+
+        }
+      }
+      else if ($where == 'title')
+      {
+
+        foreach ($searchTermArray as $searchTerm) {
+
+          if($cnt == 0)
+          {
+            $cnt++;
+            $data = Article::where("title", "like",  "%".$searchTerm."%");
+          }
+          else {
+            $data = $data->orWhere("title", "like",  "%".$searchTerm."%");
+          }
+        }
+
+        }
+        return $data->get();
+    }
+
     public function display_article_views(Article $article)
     {
         return new ArticleResource($article);
